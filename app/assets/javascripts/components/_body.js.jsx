@@ -1,10 +1,12 @@
 var Body = React.createClass({
   render() {
     return (
-      <div> // didn't work without this div
+      <div>
         <Header />
         <AllSkills />
       </div>
     )
   }
 });
+
+// didn't work without div containing Header and Skills
