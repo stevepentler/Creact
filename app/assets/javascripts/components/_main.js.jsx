@@ -1,7 +1,7 @@
 var Main = React.createClass({
   render() {
-    return( 
-      <div> 
+    return (
+      <div>
         <Header />
       </div>
     )
