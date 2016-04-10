@@ -4,6 +4,10 @@ let AllSkills = React.createClass({
     this.props.handleDelete(id);
   },
 
+  handleEdit() {
+    console.log('you are in edit');
+  },
+
   removeSkillFromDOM(id) {
     var newSkills = this.state.skills.filter((skill) => {
       return skill.id != id;
@@ -12,14 +16,17 @@ let AllSkills = React.createClass({
     this.setState({ skills: newSkills });
   },
 
+  onUpdate(skill) {
+    this.props.handleUpdate(skill);
+  },
+
   render() {
-    let skills = this.props.skills.map((skill) => {
+    var skills = this.props.skills.map((skill) => {
       return (
         <div key={skill.id}>
-          <h3>{skill.name}</h3>
-          <p><strong>Level:</strong> {skill.level}</p>
-          <p>{skill.details}</p>
-          <button onClick={this.handleDelete.bind(this, skill.id)}>Delete</button>
+          <Skill skill={skill}
+                 handleDelete={this.handleDelete.bind(this, skill.id)}
+                 handleUpdate={this.onUpdate}/>
         </div>
       )
     });

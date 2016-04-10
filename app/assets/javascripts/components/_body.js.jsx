@@ -1,4 +1,4 @@
-var Body = React.createClass({
+let Body = React.createClass({
   getInitialState() {
       return { skills: [] };
   },
@@ -22,8 +22,26 @@ var Body = React.createClass({
     });
   },
 
+  handleUpdate(skill) {
+    $.ajax({
+      url: `/api/v1/skills/${skill.id}`,
+      type: 'PUT',
+      data: { skill: skill },
+      success: () => {
+        this.updateSkills(skill);
+      }
+    });
+  },
+
+  updateSkills(skill) {
+    let skills = this.state.skills.filter((s) => { return s.id != skill.id });
+    skills.push(skill);
+
+    this.setState({ skills: skills });
+  },
+
   removeSkillFromDOM(id) {
-    var newSkills = this.state.skills.filter((skill) => {
+    let newSkills = this.state.skills.filter((skill) => {
       return skill.id != id;
     });
 
@@ -34,10 +52,13 @@ var Body = React.createClass({
     return (
       <div>
         <NewSkill handleSubmit={this.handleSubmit} />
-        <AllSkills skills={this.state.skills} handleDelete={this.handleDelete} />
+        <AllSkills skills={this.state.skills}
+                   handleDelete={this.handleDelete}
+                   handleUpdate={this.handleUpdate} />
       </div>
     )
-  }
+  },
+
 });
 
 // didn't work without div containing Header and Skills
