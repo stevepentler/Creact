@@ -1,25 +1,40 @@
-let Body = React.createClass({
+var Body = React.createClass({
   getInitialState() {
-      return { skills: [] };
+    return { skills: [] };
   },
 
   componentDidMount() {
-      $.getJSON('/api/v1/skills.json', (response) => {this.setState({ skills: response }) });
-  },
-
-  handleSubmit(skill) {
-    let newState = this.state.skills.concat(skill);
-    this.setState({ skills: newState });
+    $.getJSON('/api/v1/skills.json', (response) => { this.setState({skills: response })});
   },
 
   handleDelete(id) {
-    $.ajax({
-      url: `/api/v1/skills/${id}`,
-      type: 'DELETE',
-      success: () => {
-        this.removeSkillFromDOM(id);
-      }
-    });
+  $.ajax({
+    url: `/api/v1/skills/${id}`,
+    type: 'DELETE',
+    success: () => {
+      this.removeSkillFromDOM(id);
+    }
+  });
+},
+
+removeSkillFromDOM(id) {
+  var newSkills = this.state.skills.filter((skill) => {
+    return skill.id != id;
+  });
+
+  this.setState({ skills: newSkills });
+},
+
+  handleSubmit(skill) {
+      var newState = this.state.skills.concat(skill);
+      this.setState({skills: newState });
+  },
+
+  updateSkills(skill) {
+    var skills = this.state.skills.filter((s) => {return s.id != skill.id });
+    skills.push(skill);
+
+    this.setState({skills: skills});
   },
 
   handleUpdate(skill) {
@@ -28,24 +43,10 @@ let Body = React.createClass({
       type: 'PUT',
       data: { skill: skill },
       success: () => {
+        console.log('you did it!');
         this.updateSkills(skill);
       }
-    });
-  },
-
-  updateSkills(skill) {
-    let skills = this.state.skills.filter((s) => { return s.id != skill.id });
-    skills.push(skill);
-
-    this.setState({ skills: skills });
-  },
-
-  removeSkillFromDOM(id) {
-    let newSkills = this.state.skills.filter((skill) => {
-      return skill.id != id;
-    });
-
-    this.setState({ skills: newSkills });
+    })
   },
 
   render() {
@@ -54,12 +55,8 @@ let Body = React.createClass({
         <NewSkill handleSubmit={this.handleSubmit} />
         <AllSkills skills={this.state.skills}
                    handleDelete={this.handleDelete}
-                   handleUpdate={this.handleUpdate} />
+                   handleUpdate={this.handleUpdate}/>
       </div>
-    )
-  },
-
+    );
+  }
 });
-
-// didn't work without div containing Header and Skills
-// concat adds the skills to the old state

@@ -1,27 +1,27 @@
-let NewSkill = React.createClass({
+var NewSkill = React.createClass({
   handleClick() {
-    let name = this.refs.name.value;
-    let details = this.refs.details.value;
+    var name = this.refs.name.value;
+    var details = this.refs.details.value;
 
     $.ajax({
       url: '/api/v1/skills',
       type: 'POST',
-      data: {skill: {name: name, details: details} },
+      data: { skill: {name: name, details: details } },
       success: (skill) => {
         this.props.handleSubmit(skill);
+        this.refs.name.value = "";
+        this.refs.details.value = "";
       }
     });
   },
 
   render() {
-    return(
+    return (
       <div>
         <input ref='name' placeholder='Enter name of skill' />
         <input ref='details' placeholder='Details' />
         <button onClick={this.handleClick}>Submit</button>
       </div>
-    )
+    );
   }
 });
-
-//onClick is a React event
